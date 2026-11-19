@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- One OpenAPI document ("v1") from Microsoft.AspNetCore.OpenApi on top of the versioned ApiExplorer. The Asp.Versioning
+         analyzers suggest per-version documents instead (Asp.Versioning.OpenApi); their docs say suppressing is safe when a
+         single document is intended. Revisit when a v2 is added. -->
+    <NoWarn>$(NoWarn);AV0029;AV0030</NoWarn>
+    <UserSecretsId>5c86c675-5135-4362-b0d7-aad33e4d1896</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HjemIKroppenBooking.Application\HjemIKroppenBooking.Application.csproj" />
+    <ProjectReference Include="..\HjemIKroppenBooking.Infrastructure\HjemIKroppenBooking.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+  </ItemGroup>
+
+</Project>

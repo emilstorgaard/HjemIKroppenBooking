@@ -1,0 +1,34 @@
+# Only the solution, build props and src/ are needed to build the image.
+**/bin/
+**/obj/
+**/TestResults/
+artifacts/
+publish/
+tests/
+
+# Source control, CI and editors
+.git/
+.gitignore
+.github/
+.vs/
+.vscode/
+.idea/
+**/*.user
+**/*.suo
+
+# Docker and docs
+Dockerfile
+.dockerignore
+docker-compose*.yml
+compose*.yml
+*.md
+
+# Secrets and local settings
+.env
+.env.*
+**/appsettings.*.local.json
+**/secrets.json
+
+# Logs
+logs/
+**/*.log

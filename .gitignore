@@ -1,0 +1,52 @@
+# Build output
+bin/
+obj/
+artifacts/
+publish/
+*.binlog
+
+# Test results and coverage
+TestResults/
+coverage/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# VS Code: share only the recommended settings
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+
+# Logs
+logs/
+*.log
+
+# Secrets: only .env.example is committed
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
+# OS
+.DS_Store
+Thumbs.db

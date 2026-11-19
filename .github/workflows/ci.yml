@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  CONFIGURATION: Release
+  UNIT_TESTS: tests/HjemIKroppenBooking.UnitTests/HjemIKroppenBooking.UnitTests.csproj
+  INTEGRATION_TESTS: tests/HjemIKroppenBooking.IntegrationTests/HjemIKroppenBooking.IntegrationTests.csproj
+  MIGRATIONS_PROJECT: src/HjemIKroppenBooking.Infrastructure
+
+jobs:
+  build-and-test:
+    name: Build, test and migration script
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET (version from global.json)
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'global.json', 'nuget.config') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Restore
+        run: dotnet restore HjemIKroppenBooking.slnx
+
+      # TreatWarningsAsErrors is set in Directory.Build.props; ContinuousIntegrationBuild turns on because GITHUB_ACTIONS is set.
+      - name: Build
+        run: dotnet build HjemIKroppenBooking.slnx -c $CONFIGURATION --no-restore
+
+      - name: Unit tests
+        run: dotnet test --project $UNIT_TESTS -c $CONFIGURATION --no-build --results-directory TestResults/unit --report-xunit-trx
+
+      # Testcontainers starts SQL Server in Docker, which is available on ubuntu-latest.
+      - name: Integration tests
+        run: dotnet test --project $INTEGRATION_TESTS -c $CONFIGURATION --no-build --results-directory TestResults/integration --report-xunit-trx
+
+      - name: Create idempotent migration script
+        run: >
+          dotnet ef migrations script --idempotent --no-build --configuration $CONFIGURATION
+          --project $MIGRATIONS_PROJECT --startup-project $MIGRATIONS_PROJECT
+          --output artifacts/migrations/migrate-idempotent.sql
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/
+          if-no-files-found: ignore
+
+      - name: Upload migration script
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-script
+          path: artifacts/migrations/migrate-idempotent.sql
+          if-no-files-found: error
+
+  docker:
+    name: Docker image builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (not pushed)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: hjem-i-kroppen-booking-api:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

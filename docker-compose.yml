@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Default=${DB_CONNECTION_STRING:?Set DB_CONNECTION_STRING in .env}
+      - AllowedOrigins__0=${ALLOWED_ORIGIN:?Set ALLOWED_ORIGIN in .env}
+      - Jwt__Key=${JWT_KEY:?Set JWT_KEY in .env}
+      - ForwardedHeaders__KnownNetworks__0=${TRUSTED_PROXY_NETWORK:?Set TRUSTED_PROXY_NETWORK in .env}
+    container_name: hjem-i-kroppen-booking-api
+    restart: unless-stopped
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    name: proxy-net
+    external: true
