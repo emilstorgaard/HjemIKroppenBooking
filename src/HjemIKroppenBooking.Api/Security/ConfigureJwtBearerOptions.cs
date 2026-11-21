@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Security.Claims;
 using HjemIKroppenBooking.Application.Abstractions.Persistence;
 using HjemIKroppenBooking.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,7 +11,8 @@ namespace HjemIKroppenBooking.Api.Security;
 
 /// <summary>
 /// Configures token validation from the same <see cref="JwtOptions"/> that issue the tokens. After the signature is
-/// validated, the user must still exist and be active, so deactivating a user blocks their tokens immediately.
+/// validated, the user must still exist and be active, and the role is taken from the database, so deactivating a
+/// user or changing their role takes effect on the next request.
 /// </summary>
 internal sealed class ConfigureJwtBearerOptions(IOptions<JwtOptions> jwtOptions) : IConfigureNamedOptions<JwtBearerOptions>
 {
@@ -54,6 +56,12 @@ internal sealed class ConfigureJwtBearerOptions(IOptions<JwtOptions> jwtOptions)
         if (user is not { IsActive: true })
         {
             context.Fail("The user does not exist or is deactivated.");
+            return;
         }
+
+        // The role comes from the database, not the token. Remove any role claim in tokens issued before this change.
+        var identity = (ClaimsIdentity)context.Principal!.Identity!;
+        foreach (var claim in identity.FindAll(JwtSigning.RoleClaimType).ToList()) identity.RemoveClaim(claim);
+        identity.AddClaim(new Claim(JwtSigning.RoleClaimType, user.Role.ToString()));
     }
 }

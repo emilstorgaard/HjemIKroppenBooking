@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace HjemIKroppenBooking.Infrastructure.Security;
 
-/// <summary>Issues signed access tokens with the user id (<c>sub</c>), email and role.</summary>
+/// <summary>Issues signed access tokens that carry only the user id (<c>sub</c>). The API reads the role from the database on every request.</summary>
 internal sealed class JwtTokenService(IOptions<JwtOptions> options, TimeProvider timeProvider) : IJwtTokenService
 {
     private static readonly JsonWebTokenHandler Handler = new();
@@ -30,9 +30,7 @@ internal sealed class JwtTokenService(IOptions<JwtOptions> options, TimeProvider
             Subject = new ClaimsIdentity(
             [
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString("D", CultureInfo.InvariantCulture)),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture)),
-                new Claim(JwtSigning.RoleClaimType, Enum.GetName(user.Role) ?? throw new InvalidOperationException("Undefined role."))
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture))
             ]),
             SigningCredentials = new SigningCredentials(JwtSigning.CreateKey(jwt), JwtSigning.Algorithm)
         };
