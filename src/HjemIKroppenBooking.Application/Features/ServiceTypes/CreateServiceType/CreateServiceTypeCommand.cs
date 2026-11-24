@@ -5,5 +5,5 @@ using HjemIKroppenBooking.Application.Messaging;
 namespace HjemIKroppenBooking.Application.Features.ServiceTypes.CreateServiceType;
 
 public sealed record CreateServiceTypeCommand(
-    Guid CategoryId, string Name, string? Description, int DefaultDurationMinutes, int DefaultCapacity, int SortOrder, bool IsActive)
+    Guid CategoryId, string Name, string? Description, int DefaultDurationMinutes, int DefaultCapacity, bool IsActive)
     : ICommand<AdminServiceTypeResponse>, IServiceTypeFields;

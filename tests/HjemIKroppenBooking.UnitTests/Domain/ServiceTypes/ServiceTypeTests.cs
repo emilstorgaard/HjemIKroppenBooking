@@ -14,7 +14,7 @@ public sealed class ServiceTypeTests
         const string name = "  Saturday group  ";
 
         // Act
-        var serviceType = ServiceType.Create(Category(), name, "  ", 90, 12, 3, isActive: true);
+        var serviceType = ServiceType.Create(Category(), name, "  ", 90, 12, isActive: true);
 
         // Assert
         Assert.Equal("Saturday group", serviceType.Name);
@@ -32,7 +32,7 @@ public sealed class ServiceTypeTests
         var category = Category();
 
         // Act
-        var serviceType = ServiceType.Create(category, "Talk therapy", null, 60, capacity, 0, isActive: true);
+        var serviceType = ServiceType.Create(category, "Talk therapy", null, 60, capacity, isActive: true);
 
         // Assert
         Assert.Equal(capacity, serviceType.DefaultCapacity);
@@ -47,7 +47,7 @@ public sealed class ServiceTypeTests
         const string name = "Dance therapy";
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, durationMinutes, 1, 0, isActive: true));
+        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, durationMinutes, 1, isActive: true));
 
         // Assert
         AssertDomainError(exception, ErrorCodes.ValidationDurationOutOfRange, ErrorType.Validation);
@@ -60,7 +60,7 @@ public sealed class ServiceTypeTests
         var name = new string('x', ServiceType.NameMaxLength + 1);
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, 60, 1, 0, isActive: true));
+        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, 60, 1, isActive: true));
 
         // Assert
         var error = AssertDomainError(exception, ErrorCodes.ValidationMaxLength, ErrorType.Validation);
@@ -74,7 +74,7 @@ public sealed class ServiceTypeTests
         var category = Category();
 
         // Act
-        var serviceType = ServiceType.Create(category, "Dance therapy", null, 60, 1, 0, isActive: true);
+        var serviceType = ServiceType.Create(category, "Dance therapy", null, 60, 1, isActive: true);
 
         // Assert
         Assert.Equal(category.Id, serviceType.CategoryId);

@@ -14,7 +14,7 @@ internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
 {
     private static readonly Expression<Func<ServiceType, ServiceTypeResponse>> ToPublic =
         s => new ServiceTypeResponse(
-            s.Id, new ServiceCategorySummary(s.Category.Id, s.Category.Name, s.Category.Slug), s.Name, s.Description, s.DefaultDurationMinutes, s.DefaultCapacity, s.SortOrder);
+            s.Id, new ServiceCategorySummary(s.Category.Id, s.Category.Name, s.Category.Slug), s.Name, s.Description, s.DefaultDurationMinutes, s.DefaultCapacity);
 
     private static readonly Expression<Func<ServiceType, AdminServiceTypeResponse>> ToAdmin =
         s => new AdminServiceTypeResponse(
@@ -24,7 +24,6 @@ internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
             s.Description,
             s.DefaultDurationMinutes,
             s.DefaultCapacity,
-            s.SortOrder,
             s.IsActive,
             s.CreatedAtUtc,
             s.UpdatedAtUtc);
@@ -63,5 +62,5 @@ internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
         db.ServiceTypes.AsNoTracking().Where(s => s.Id == id).Select(ToAdmin).SingleOrDefaultAsync(cancellationToken);
 
     private static IOrderedQueryable<ServiceType> Order(IQueryable<ServiceType> query) =>
-        query.OrderBy(s => s.Category.CreatedAtUtc).ThenBy(s => s.Category.Name).ThenBy(s => s.SortOrder).ThenBy(s => s.Name).ThenBy(s => s.Id);
+        query.OrderBy(s => s.Category.CreatedAtUtc).ThenBy(s => s.Category.Name).ThenBy(s => s.CreatedAtUtc).ThenBy(s => s.Name).ThenBy(s => s.Id);
 }

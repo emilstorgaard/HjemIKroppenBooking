@@ -12,7 +12,6 @@ public static class ServiceTypeMapping
         serviceType.Description,
         serviceType.DefaultDurationMinutes,
         serviceType.DefaultCapacity,
-        serviceType.SortOrder,
         serviceType.IsActive,
         serviceType.CreatedAtUtc,
         serviceType.UpdatedAtUtc);

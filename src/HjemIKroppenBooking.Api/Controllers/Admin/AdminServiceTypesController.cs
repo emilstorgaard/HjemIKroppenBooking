@@ -38,7 +38,7 @@ public sealed class AdminServiceTypesController(IDispatcher dispatcher) : AdminC
     public async Task<ActionResult<AdminServiceTypeResponse>> Create(ServiceTypeRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateServiceTypeCommand(
-            request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
+            request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.IsActive);
         var serviceType = await Dispatcher.Send(command, cancellationToken);
         return Created(ApiRoutes.V1Path($"/admin/service-types/{serviceType.Id}"), serviceType);
     }
@@ -52,7 +52,7 @@ public sealed class AdminServiceTypesController(IDispatcher dispatcher) : AdminC
     public async Task<ActionResult<AdminServiceTypeResponse>> Update(Guid id, ServiceTypeRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateServiceTypeCommand(
-            id, request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
+            id, request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.IsActive);
         return Ok(await Dispatcher.Send(command, cancellationToken));
     }
 

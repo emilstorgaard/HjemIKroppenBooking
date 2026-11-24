@@ -9,8 +9,6 @@ public sealed record AdminServiceTypeResponse(
     string? Description,
     int DefaultDurationMinutes,
     int DefaultCapacity,
-    int SortOrder,
     bool IsActive,
     DateTime CreatedAt,
-    DateTime UpdatedAt
-);
+    DateTime UpdatedAt);

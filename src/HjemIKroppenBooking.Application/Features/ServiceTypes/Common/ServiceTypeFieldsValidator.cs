@@ -19,6 +19,5 @@ public sealed class ServiceTypeFieldsValidator : AppValidator<IServiceTypeFields
         // Whether the category allows more than one spot is checked by the domain, which knows the category.
         RuleFor(x => x.DefaultCapacity)
             .InclusiveBetween(Session.MinCapacity, Session.MaxCapacity).WithErrorCode(ErrorCodes.ValidationCapacityOutOfRange);
-        RuleFor(x => x.SortOrder).GreaterThanOrEqualTo(0).WithErrorCode(ErrorCodes.ValidationInvalidValue);
     }
 }

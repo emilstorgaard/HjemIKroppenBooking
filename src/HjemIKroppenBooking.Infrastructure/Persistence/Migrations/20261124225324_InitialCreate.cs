@@ -55,7 +55,6 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
                     DefaultDurationMinutes = table.Column<int>(type: "int", nullable: false),
                     DefaultCapacity = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    SortOrder = table.Column<int>(type: "int", nullable: false),
                     CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

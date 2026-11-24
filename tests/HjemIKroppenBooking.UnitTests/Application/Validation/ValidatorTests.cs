@@ -156,7 +156,7 @@ public sealed class ValidatorTests
     public void CreateServiceTypeValidator_MissingCategory_ReturnsRequired()
     {
         // Arrange
-        var command = new CreateServiceTypeCommand(Guid.Empty, "Name", null, 60, 1, 0, IsActive: true);
+        var command = new CreateServiceTypeCommand(Guid.Empty, "Name", null, 60, 1, IsActive: true);
 
         // Act
         var result = new CreateServiceTypeCommandValidator().Validate(command);

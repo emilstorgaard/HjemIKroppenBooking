@@ -40,7 +40,7 @@ public sealed class SessionSeriesTests
     public void Create_WithoutTitle_UsesServiceTypeName()
     {
         // Arrange
-        var serviceType = ServiceType.Create(Category(), "Saturday group", null, 60, 8, 0, isActive: true);
+        var serviceType = ServiceType.Create(Category(), "Saturday group", null, 60, 8, isActive: true);
 
         // Act
         var series = SessionSeries.Create(serviceType, "   ");

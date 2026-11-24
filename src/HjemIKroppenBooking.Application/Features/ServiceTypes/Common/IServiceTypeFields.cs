@@ -13,7 +13,5 @@ public interface IServiceTypeFields
 
     int DefaultCapacity { get; }
 
-    int SortOrder { get; }
-
     bool IsActive { get; }
 }

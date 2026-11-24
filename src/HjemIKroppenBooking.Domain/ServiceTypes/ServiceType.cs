@@ -35,19 +35,16 @@ public sealed class ServiceType : Entity
 
     public bool IsActive { get; private set; }
 
-    /// <summary>Display order. Lowest first.</summary>
-    public int SortOrder { get; private set; }
-
     public static ServiceType Create(
-        ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, int sortOrder, bool isActive)
+        ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, bool isActive)
     {
         var serviceType = new ServiceType();
-        serviceType.Update(category, name, description, defaultDurationMinutes, defaultCapacity, sortOrder, isActive);
+        serviceType.Update(category, name, description, defaultDurationMinutes, defaultCapacity, isActive);
         return serviceType;
     }
 
     public void Update(
-        ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, int sortOrder, bool isActive)
+        ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, bool isActive)
     {
         ArgumentNullException.ThrowIfNull(category);
         var validName = Guard.RequiredText(name, NameMaxLength, "name");
@@ -61,7 +58,6 @@ public sealed class ServiceType : Entity
         Description = validDescription;
         DefaultDurationMinutes = defaultDurationMinutes;
         DefaultCapacity = defaultCapacity;
-        SortOrder = sortOrder;
         IsActive = isActive;
     }
 

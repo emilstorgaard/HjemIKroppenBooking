@@ -16,7 +16,7 @@ public sealed class AdminServiceCategoryTests(ApiFactory factory) : IntegrationT
         var admin = await CreateAdminAsync();
         using var adminClient = CreateClient(admin.Token);
         var categoryId = await CreateCategoryAsync(adminClient);
-        var request = new { categoryId, name = "Teatergruppe", description = (string?)null, defaultDurationMinutes = 90, defaultCapacity = 8, sortOrder = 0, isActive = true };
+        var request = new { categoryId, name = "Teatergruppe", description = (string?)null, defaultDurationMinutes = 90, defaultCapacity = 8, isActive = true };
 
         // Act
         using var response = await adminClient.PostAsJsonAsync("/api/v1/admin/service-types", request, Json, Ct);

@@ -15,7 +15,7 @@ public sealed class CreateServiceTypeCommandHandler(IServiceTypeRepository servi
     {
         var category = await categories.GetByIdAsync(command.CategoryId, cancellationToken) ?? throw DomainException.NotFound(ErrorCodes.ServiceCategoryNotFound);
         var serviceType = ServiceType.Create(
-            category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.SortOrder, command.IsActive);
+            category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.IsActive);
 
         if (await serviceTypes.NameExistsAsync(serviceType.CategoryId, serviceType.Name, null, cancellationToken))
         {

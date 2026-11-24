@@ -15,7 +15,7 @@ public sealed class UpdateServiceTypeCommandHandler(IServiceTypeRepository servi
         var serviceType = await serviceTypes.GetByIdAsync(command.Id, cancellationToken) ?? throw DomainException.NotFound(ErrorCodes.ServiceTypeNotFound);
         var category = await categories.GetByIdAsync(command.CategoryId, cancellationToken) ?? throw DomainException.NotFound(ErrorCodes.ServiceCategoryNotFound);
         serviceType.Update(
-            category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.SortOrder, command.IsActive);
+            category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.IsActive);
 
         if (await serviceTypes.NameExistsAsync(serviceType.CategoryId, serviceType.Name, serviceType.Id, cancellationToken))
         {

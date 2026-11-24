@@ -85,7 +85,7 @@ public abstract class IntegrationTestBase(ApiFactory factory) : IClassFixture<Ap
     protected static async Task<Guid> CreateGroupServiceTypeAsync(HttpClient admin)
     {
         var categoryId = await CreateCategoryAsync(admin);
-        var request = new { categoryId, name = $"Group {Guid.NewGuid():N}", description = (string?)null, defaultDurationMinutes = 60, defaultCapacity = 10, sortOrder = 0, isActive = true };
+        var request = new { categoryId, name = $"Group {Guid.NewGuid():N}", description = (string?)null, defaultDurationMinutes = 60, defaultCapacity = 10, isActive = true };
         using var response = await admin.PostAsJsonAsync("/api/v1/admin/service-types", request, Json, Ct);
         return (await ReadAsync<AdminServiceTypeResponse>(response, HttpStatusCode.Created)).Id;
     }

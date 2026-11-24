@@ -16,10 +16,10 @@ internal static class TestData
     public static ServiceCategory Category() => ServiceCategory.Create("Danseterapi", "danseterapi");
 
     public static ServiceType GroupServiceType(bool isActive = true) =>
-        ServiceType.Create(Category(), "Theatre group", null, 90, 10, 0, isActive);
+        ServiceType.Create(Category(), "Theatre group", null, 90, 10, isActive);
 
     public static ServiceType IndividualServiceType() =>
-        ServiceType.Create(Category(), "Dance therapy", null, 60, 1, 0, isActive: true);
+        ServiceType.Create(Category(), "Dance therapy", null, 60, 1, isActive: true);
 
     /// <summary>Schedules a session (created at <see cref="Now"/>) starting one day from now by default.</summary>
     public static Session CreateSession(int capacity = 5, DateTime? startsAt = null, int durationMinutes = 60, ServiceType? serviceType = null, SessionSeries? series = null)
