@@ -1,13 +1,13 @@
 using FluentValidation.Results;
 using HjemIKroppenBooking.Application.Features.Auth.Register;
 using HjemIKroppenBooking.Application.Features.Series.CreateSeries;
+using HjemIKroppenBooking.Application.Features.ServiceCategories.CreateServiceCategory;
 using HjemIKroppenBooking.Application.Features.ServiceTypes.CreateServiceType;
 using HjemIKroppenBooking.Application.Features.Sessions.ListSessions;
 using HjemIKroppenBooking.Application.Features.Sessions.UpdateSession;
 using HjemIKroppenBooking.Application.Features.Users.UpdateMyPassword;
 using HjemIKroppenBooking.Domain.Common;
 using HjemIKroppenBooking.Domain.Series;
-using HjemIKroppenBooking.Domain.ServiceTypes;
 using static HjemIKroppenBooking.UnitTests.Domain.TestData;
 
 namespace HjemIKroppenBooking.UnitTests.Application.Validation;
@@ -152,21 +152,30 @@ public sealed class ValidatorTests
         AssertSingleError(result, "To", ErrorCodes.ValidationDateRangeInvalid);
     }
 
-    [Theory]
-    [InlineData(ServiceCategory.Dance, 2, false)]
-    [InlineData(ServiceCategory.Conversation, 1, true)]
-    [InlineData(ServiceCategory.Group, 12, true)]
-    public void CreateServiceTypeValidator_Capacity_DependsOnCategory(ServiceCategory category, int capacity, bool expectedValid)
+    [Fact]
+    public void CreateServiceTypeValidator_MissingCategory_ReturnsRequired()
     {
         // Arrange
-        var command = new CreateServiceTypeCommand(category, "Name", null, 60, capacity, 0, IsActive: true);
+        var command = new CreateServiceTypeCommand(Guid.Empty, "Name", null, 60, 1, 0, IsActive: true);
 
         // Act
         var result = new CreateServiceTypeCommandValidator().Validate(command);
 
         // Assert
-        Assert.Equal(expectedValid, result.IsValid);
-        Assert.All(result.Errors, e => Assert.Equal(ErrorCodes.ValidationIndividualCapacityMustBeOne, e.ErrorCode));
+        AssertSingleError(result, "CategoryId", ErrorCodes.ValidationRequired);
+    }
+
+    [Fact]
+    public void CreateServiceCategoryValidator_EmptyName_ReturnsRequired()
+    {
+        // Arrange
+        var command = new CreateServiceCategoryCommand("  ");
+
+        // Act
+        var result = new CreateServiceCategoryCommandValidator().Validate(command);
+
+        // Assert
+        AssertSingleError(result, "Name", ErrorCodes.ValidationRequired);
     }
 
     private static void AssertSingleError(ValidationResult result, string propertyName, string expectedCode)

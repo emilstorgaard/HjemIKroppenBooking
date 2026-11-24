@@ -32,7 +32,7 @@ public sealed class AdminSeriesController(IDispatcher dispatcher) : AdminControl
     public async Task<ActionResult<AdminSeriesResponse>> GetById(Guid id, CancellationToken cancellationToken) =>
         Ok(await Dispatcher.Query(new GetSeriesByIdQuery(id), cancellationToken));
 
-    /// <summary>Creates a series of a group service type with one session per start time.</summary>
+    /// <summary>Creates a series of a service type with one session per start time.</summary>
     [HttpPost]
     [ProducesResponseType<AdminSeriesResponse>(StatusCodes.Status201Created)]
     [ProducesValidationProblem(StatusCodes.Status422UnprocessableEntity)]

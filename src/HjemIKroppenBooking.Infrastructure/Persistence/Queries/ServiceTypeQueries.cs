@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using HjemIKroppenBooking.Application.Abstractions.Persistence;
 using HjemIKroppenBooking.Application.Contracts.Responses.Common;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Application.Contracts.Responses.ServiceTypes;
 using HjemIKroppenBooking.Application.Features.ServiceTypes.ListPublicServiceTypes;
 using HjemIKroppenBooking.Application.Features.ServiceTypes.ListServiceTypes;
@@ -12,18 +13,28 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Queries;
 internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
 {
     private static readonly Expression<Func<ServiceType, ServiceTypeResponse>> ToPublic =
-        s => new ServiceTypeResponse(s.Id, s.Category, s.Name, s.Description, s.DefaultDurationMinutes, s.DefaultCapacity, s.SortOrder);
+        s => new ServiceTypeResponse(
+            s.Id, new ServiceCategorySummary(s.Category.Id, s.Category.Name, s.Category.Slug), s.Name, s.Description, s.DefaultDurationMinutes, s.DefaultCapacity, s.SortOrder);
 
     private static readonly Expression<Func<ServiceType, AdminServiceTypeResponse>> ToAdmin =
         s => new AdminServiceTypeResponse(
-            s.Id, s.Category, s.Name, s.Description, s.DefaultDurationMinutes, s.DefaultCapacity, s.SortOrder, s.IsActive, s.CreatedAtUtc, s.UpdatedAtUtc);
+            s.Id,
+            new ServiceCategorySummary(s.Category.Id, s.Category.Name, s.Category.Slug),
+            s.Name,
+            s.Description,
+            s.DefaultDurationMinutes,
+            s.DefaultCapacity,
+            s.SortOrder,
+            s.IsActive,
+            s.CreatedAtUtc,
+            s.UpdatedAtUtc);
 
     public Task<PagedResponse<ServiceTypeResponse>> ListPublicAsync(ListPublicServiceTypesQuery query, CancellationToken cancellationToken)
     {
         var serviceTypes = db.ServiceTypes.AsNoTracking().Where(s => s.IsActive);
-        if (query.Category is { } category)
+        if (query.CategoryId is { } categoryId)
         {
-            serviceTypes = serviceTypes.Where(s => s.Category == category);
+            serviceTypes = serviceTypes.Where(s => s.CategoryId == categoryId);
         }
 
         return serviceTypes.ToPagedResponseAsync(Order, ToPublic, query.Page, query.PageSize, cancellationToken);
@@ -35,9 +46,9 @@ internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
     public Task<PagedResponse<AdminServiceTypeResponse>> ListAsync(ListServiceTypesQuery query, CancellationToken cancellationToken)
     {
         var serviceTypes = db.ServiceTypes.AsNoTracking();
-        if (query.Category is { } category)
+        if (query.CategoryId is { } categoryId)
         {
-            serviceTypes = serviceTypes.Where(s => s.Category == category);
+            serviceTypes = serviceTypes.Where(s => s.CategoryId == categoryId);
         }
 
         if (query.IsActive is { } isActive)
@@ -52,5 +63,5 @@ internal sealed class ServiceTypeQueries(AppDbContext db) : IServiceTypeQueries
         db.ServiceTypes.AsNoTracking().Where(s => s.Id == id).Select(ToAdmin).SingleOrDefaultAsync(cancellationToken);
 
     private static IOrderedQueryable<ServiceType> Order(IQueryable<ServiceType> query) =>
-        query.OrderBy(s => s.SortOrder).ThenBy(s => s.Name).ThenBy(s => s.Id);
+        query.OrderBy(s => s.Category.CreatedAtUtc).ThenBy(s => s.Category.Name).ThenBy(s => s.SortOrder).ThenBy(s => s.Name).ThenBy(s => s.Id);
 }

@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using HjemIKroppenBooking.Application.Abstractions.Persistence;
 using HjemIKroppenBooking.Application.Contracts.Responses.Common;
 using HjemIKroppenBooking.Application.Contracts.Responses.Series;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Application.Features.Series.ListBookableSeries;
 using HjemIKroppenBooking.Application.Features.Series.ListSeries;
 using HjemIKroppenBooking.Application.Features.Series.ListSeriesParticipants;
@@ -18,7 +19,7 @@ internal sealed class SeriesQueries(AppDbContext db) : ISeriesQueries
         s.Title,
         s.ServiceTypeId,
         s.ServiceType.Name,
-        s.ServiceType.Category,
+        new ServiceCategorySummary(s.ServiceType.Category.Id, s.ServiceType.Category.Name, s.ServiceType.Category.Slug),
         s.IsCancelled,
         s.CancelledAtUtc,
         s.Sessions.SelectMany(x => x.Bookings).Where(b => b.Status == BookingStatus.Active).Select(b => b.UserId).Distinct().Count(),
@@ -37,7 +38,7 @@ internal sealed class SeriesQueries(AppDbContext db) : ISeriesQueries
         s.Title,
         s.ServiceTypeId,
         s.ServiceType.Name,
-        s.ServiceType.Category,
+        new ServiceCategorySummary(s.ServiceType.Category.Id, s.ServiceType.Category.Name, s.ServiceType.Category.Slug),
         s.IsCancelled,
         s.Sessions.Select(x => x.Id).Count(),
         s.Sessions.SelectMany(x => x.Bookings).Where(b => b.Status == BookingStatus.Active).Select(b => b.UserId).Distinct().Count(),
@@ -142,7 +143,7 @@ internal sealed class SeriesQueries(AppDbContext db) : ISeriesQueries
         s.Title,
         s.ServiceTypeId,
         s.ServiceType.Name,
-        s.ServiceType.Category,
+        new ServiceCategorySummary(s.ServiceType.Category.Id, s.ServiceType.Category.Name, s.ServiceType.Category.Slug),
         s.Sessions.Any(x => !x.IsCancelled && x.StartsAtUtc > nowUtc),
         s.Sessions.Where(x => !x.IsCancelled && x.StartsAtUtc > nowUtc).Min(x => (int?)(x.Capacity - x.ActiveBookingCount)) ?? 0,
         s.Sessions.Where(x => !x.IsCancelled).Min(x => (DateTime?)x.StartsAtUtc),

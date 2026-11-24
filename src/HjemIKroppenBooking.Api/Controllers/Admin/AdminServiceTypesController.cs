@@ -23,7 +23,7 @@ public sealed class AdminServiceTypesController(IDispatcher dispatcher) : AdminC
     [ProducesResponseType<PagedResponse<AdminServiceTypeResponse>>(StatusCodes.Status200OK)]
     [ProducesValidationProblem(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<PagedResponse<AdminServiceTypeResponse>>> List([FromQuery] ListServiceTypesRequest request, CancellationToken cancellationToken) =>
-        Ok(await Dispatcher.Query(new ListServiceTypesQuery(request.Category, request.IsActive, request.Page, request.PageSize), cancellationToken));
+        Ok(await Dispatcher.Query(new ListServiceTypesQuery(request.CategoryId, request.IsActive, request.Page, request.PageSize), cancellationToken));
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType<AdminServiceTypeResponse>(StatusCodes.Status200OK)]
@@ -38,12 +38,12 @@ public sealed class AdminServiceTypesController(IDispatcher dispatcher) : AdminC
     public async Task<ActionResult<AdminServiceTypeResponse>> Create(ServiceTypeRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateServiceTypeCommand(
-            request.Category, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
+            request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
         var serviceType = await Dispatcher.Send(command, cancellationToken);
         return Created(ApiRoutes.V1Path($"/admin/service-types/{serviceType.Id}"), serviceType);
     }
 
-    /// <summary>Replaces the service type. The category cannot change while sessions or series use the service type.</summary>
+    /// <summary>Replaces the service type. It can move to another category at any time.</summary>
     [HttpPut("{id:guid}")]
     [ProducesResponseType<AdminServiceTypeResponse>(StatusCodes.Status200OK)]
     [ProducesValidationProblem(StatusCodes.Status422UnprocessableEntity)]
@@ -52,7 +52,7 @@ public sealed class AdminServiceTypesController(IDispatcher dispatcher) : AdminC
     public async Task<ActionResult<AdminServiceTypeResponse>> Update(Guid id, ServiceTypeRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateServiceTypeCommand(
-            id, request.Category, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
+            id, request.CategoryId, request.Name, request.Description, request.DefaultDurationMinutes, request.DefaultCapacity, request.SortOrder, request.IsActive);
         return Ok(await Dispatcher.Send(command, cancellationToken));
     }
 

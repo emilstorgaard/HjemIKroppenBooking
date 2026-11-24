@@ -36,12 +36,17 @@ public static class ErrorCatalog
         [ErrorCodes.UserInactive] = "Brugeren er deaktiveret.",
         [ErrorCodes.UserCannotChangeOwnAccount] = "Du kan ikke ændre din egen konto her. Brug din profil i stedet.",
 
+        // Service categories
+        [ErrorCodes.ServiceCategoryNotFound] = "Kategorien findes ikke.",
+        [ErrorCodes.ServiceCategoryNameAlreadyExists] = "Der findes allerede en kategori med det navn.",
+        [ErrorCodes.ServiceCategorySlugAlreadyExists] = "Der findes allerede en kategori med et lignende navn. Prøv igen.",
+        [ErrorCodes.ServiceCategoryInUse] = "Kategorien har ydelser og kan derfor ikke slettes. Flyt eller slet ydelserne først.",
+
         // Service types
         [ErrorCodes.ServiceTypeNotFound] = "Ydelsen findes ikke.",
         [ErrorCodes.ServiceTypeNameAlreadyExists] = "Der findes allerede en ydelse med det navn i denne kategori.",
         [ErrorCodes.ServiceTypeInactive] = "Ydelsen er deaktiveret. Aktivér den først.",
         [ErrorCodes.ServiceTypeInUse] = "Ydelsen bruges af tider eller forløb, så det er ikke muligt. Du kan deaktivere den i stedet.",
-        [ErrorCodes.ServiceTypeNotGroup] = "Forløb kan kun oprettes for gruppeydelser.",
 
         // Sessions
         [ErrorCodes.SessionNotFound] = "Tiden findes ikke.",
@@ -75,11 +80,11 @@ public static class ErrorCatalog
         [ErrorCodes.ValidationInvalidValue] = "Værdien er ugyldig.",
         [ErrorCodes.ValidationEnumInvalid] = "Vælg en gyldig værdi.",
         [ErrorCodes.ValidationEmailInvalid] = "Indtast en gyldig e-mailadresse.",
+        [ErrorCodes.ValidationSlugInvalid] = "Må kun indeholde små bogstaver (a-z), tal og bindestreger, fx dans-og-bevaegelse.",
         [ErrorCodes.ValidationPasswordTooShort] = string.Create(CultureInfo.InvariantCulture, $"Adgangskoden skal være mindst {ValidationRules.PasswordMinLength} tegn."),
         [ErrorCodes.ValidationPasswordTooLong] = "Adgangskoden er for lang.",
         [ErrorCodes.ValidationPasswordUnchanged] = "Den nye adgangskode skal være forskellig fra den nuværende.",
         [ErrorCodes.ValidationCapacityOutOfRange] = string.Create(CultureInfo.InvariantCulture, $"Antallet af pladser skal være mellem {Session.MinCapacity} og {Session.MaxCapacity}."),
-        [ErrorCodes.ValidationIndividualCapacityMustBeOne] = "Individuelle ydelser har altid præcis 1 plads.",
         [ErrorCodes.ValidationDurationOutOfRange] = string.Create(CultureInfo.InvariantCulture, $"Varigheden skal være mellem {Session.MinDurationMinutes} og {Session.MaxDurationMinutes} minutter."),
         [ErrorCodes.ValidationEndBeforeStart] = "Sluttidspunktet skal ligge efter starttidspunktet.",
         [ErrorCodes.ValidationDateRangeInvalid] = "Slutdatoen skal ligge efter startdatoen.",

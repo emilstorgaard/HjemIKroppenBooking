@@ -1,12 +1,10 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
-
 namespace HjemIKroppenBooking.Api.Contracts.Requests.Sessions;
 
 public sealed class ListPublicSessionsRequest : PagedRequest
 {
     public Guid? ServiceTypeId { get; init; }
 
-    public ServiceCategory? Category { get; init; }
+    public Guid? CategoryId { get; init; }
 
     /// <summary>Session starts at or after this time (inclusive).</summary>
     public DateTimeOffset? From { get; init; }

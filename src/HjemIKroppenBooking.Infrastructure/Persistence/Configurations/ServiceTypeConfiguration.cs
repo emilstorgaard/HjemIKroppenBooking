@@ -8,11 +8,10 @@ internal sealed class ServiceTypeConfiguration : IEntityTypeConfiguration<Servic
 {
     public void Configure(EntityTypeBuilder<ServiceType> builder)
     {
-        builder.Property(x => x.Category).HasConversion<string>().HasMaxLength(20).IsRequired();
         builder.Property(x => x.Name).HasMaxLength(ServiceType.NameMaxLength).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(ServiceType.DescriptionMaxLength);
-        builder.Ignore(x => x.IsGroup);
 
-        builder.HasIndex(x => new { x.Category, x.Name }).IsUnique().HasDatabaseName(IndexNames.ServiceTypeName);
+        builder.HasOne(x => x.Category).WithMany().HasForeignKey(x => x.CategoryId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasIndex(x => new { x.CategoryId, x.Name }).IsUnique().HasDatabaseName(IndexNames.ServiceTypeName);
     }
 }

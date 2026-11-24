@@ -7,7 +7,7 @@ public static class ServiceTypeMapping
 {
     public static AdminServiceTypeResponse ToAdminResponse(this ServiceType serviceType) => new(
         serviceType.Id,
-        serviceType.Category,
+        serviceType.Category.ToSummary(),
         serviceType.Name,
         serviceType.Description,
         serviceType.DefaultDurationMinutes,

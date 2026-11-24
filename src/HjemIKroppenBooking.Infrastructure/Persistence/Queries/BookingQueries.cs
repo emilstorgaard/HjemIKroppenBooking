@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using HjemIKroppenBooking.Application.Abstractions.Persistence;
 using HjemIKroppenBooking.Application.Contracts.Responses.Bookings;
 using HjemIKroppenBooking.Application.Contracts.Responses.Common;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Application.Features.Bookings.Common;
 using HjemIKroppenBooking.Domain.Bookings;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ internal sealed class BookingQueries(AppDbContext db) : IBookingQueries
         b.SessionId,
         b.Session.SeriesId,
         b.Session.ServiceType.Name,
-        b.Session.ServiceType.Category,
+        new ServiceCategorySummary(b.Session.ServiceType.Category.Id, b.Session.ServiceType.Category.Name, b.Session.ServiceType.Category.Slug),
         b.Session.StartsAtUtc,
         b.Session.EndsAtUtc,
         b.Session.Location,

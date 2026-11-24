@@ -1,6 +1,7 @@
 using HjemIKroppenBooking.Domain.Bookings;
 using HjemIKroppenBooking.Domain.Common;
 using HjemIKroppenBooking.Domain.Series;
+using HjemIKroppenBooking.Domain.ServiceCategories;
 using HjemIKroppenBooking.Domain.ServiceTypes;
 using HjemIKroppenBooking.Domain.Sessions;
 using HjemIKroppenBooking.Domain.Users;
@@ -13,6 +14,8 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence;
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options, TimeProvider timeProvider) : DbContext(options)
 {
     public DbSet<User> Users => Set<User>();
+
+    public DbSet<ServiceCategory> ServiceCategories => Set<ServiceCategory>();
 
     public DbSet<ServiceType> ServiceTypes => Set<ServiceType>();
 

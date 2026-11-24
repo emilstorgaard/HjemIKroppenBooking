@@ -11,16 +11,16 @@ public sealed class SessionSeriesTests
     private static readonly Guid UserB = Guid.NewGuid();
 
     [Fact]
-    public void Create_IndividualServiceType_ThrowsNotGroup()
+    public void Create_SingleSpotServiceType_Succeeds()
     {
         // Arrange
         var serviceType = IndividualServiceType();
 
         // Act
-        var exception = Record.Exception(() => SessionSeries.Create(serviceType, "Series"));
+        var series = SessionSeries.Create(serviceType, "Series");
 
         // Assert
-        AssertDomainError(exception, ErrorCodes.ServiceTypeNotGroup, ErrorType.Validation);
+        Assert.Equal(serviceType.Id, series.ServiceTypeId);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class SessionSeriesTests
     public void Create_WithoutTitle_UsesServiceTypeName()
     {
         // Arrange
-        var serviceType = ServiceType.Create(ServiceCategory.Group, "Saturday group", null, 60, 8, 0, isActive: true);
+        var serviceType = ServiceType.Create(Category(), "Saturday group", null, 60, 8, 0, isActive: true);
 
         // Act
         var series = SessionSeries.Create(serviceType, "   ");

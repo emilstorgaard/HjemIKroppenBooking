@@ -1,4 +1,4 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 
 namespace HjemIKroppenBooking.Application.Contracts.Responses.Sessions;
 
@@ -6,7 +6,7 @@ public sealed record AdminSessionResponse(
     Guid Id,
     Guid ServiceTypeId,
     string ServiceTypeName,
-    ServiceCategory Category,
+    ServiceCategorySummary Category,
     Guid? SeriesId,
     string? SeriesTitle,
     DateTime StartsAt,
@@ -20,4 +20,5 @@ public sealed record AdminSessionResponse(
     DateTime? CancelledAt,
     Guid CreatedByUserId,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt
+);

@@ -1,12 +1,10 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
-
 namespace HjemIKroppenBooking.Api.Contracts.Requests.Sessions;
 
 public sealed class ListSessionsRequest : PagedRequest
 {
     public Guid? ServiceTypeId { get; init; }
 
-    public ServiceCategory? Category { get; init; }
+    public Guid? CategoryId { get; init; }
 
     public Guid? SeriesId { get; init; }
 

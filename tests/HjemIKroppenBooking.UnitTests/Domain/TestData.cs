@@ -1,5 +1,6 @@
 using HjemIKroppenBooking.Domain.Common;
 using HjemIKroppenBooking.Domain.Series;
+using HjemIKroppenBooking.Domain.ServiceCategories;
 using HjemIKroppenBooking.Domain.ServiceTypes;
 using HjemIKroppenBooking.Domain.Sessions;
 
@@ -12,11 +13,13 @@ internal static class TestData
 
     public static readonly Guid AdminId = Guid.NewGuid();
 
+    public static ServiceCategory Category() => ServiceCategory.Create("Danseterapi", "danseterapi");
+
     public static ServiceType GroupServiceType(bool isActive = true) =>
-        ServiceType.Create(ServiceCategory.Group, "Theatre group", null, 90, 10, 0, isActive);
+        ServiceType.Create(Category(), "Theatre group", null, 90, 10, 0, isActive);
 
     public static ServiceType IndividualServiceType() =>
-        ServiceType.Create(ServiceCategory.Dance, "Dance therapy", null, 60, 1, 0, isActive: true);
+        ServiceType.Create(Category(), "Dance therapy", null, 60, 1, 0, isActive: true);
 
     /// <summary>Schedules a session (created at <see cref="Now"/>) starting one day from now by default.</summary>
     public static Session CreateSession(int capacity = 5, DateTime? startsAt = null, int durationMinutes = 60, ServiceType? serviceType = null, SessionSeries? series = null)

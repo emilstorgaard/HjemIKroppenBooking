@@ -1,10 +1,10 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 
 namespace HjemIKroppenBooking.Application.Contracts.Responses.ServiceTypes;
 
 public sealed record AdminServiceTypeResponse(
     Guid Id,
-    ServiceCategory Category,
+    ServiceCategorySummary Category,
     string Name,
     string? Description,
     int DefaultDurationMinutes,
@@ -12,4 +12,5 @@ public sealed record AdminServiceTypeResponse(
     int SortOrder,
     bool IsActive,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt
+);

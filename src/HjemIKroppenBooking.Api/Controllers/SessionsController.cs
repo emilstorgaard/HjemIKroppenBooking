@@ -24,7 +24,7 @@ public sealed class SessionsController(IDispatcher dispatcher) : ApiControllerBa
     public async Task<ActionResult<PagedResponse<SessionResponse>>> List([FromQuery] ListPublicSessionsRequest request, CancellationToken cancellationToken)
     {
         var query = new ListPublicSessionsQuery(
-            request.ServiceTypeId, request.Category, request.From?.UtcDateTime, request.To?.UtcDateTime, request.OnlyAvailable, request.Page, request.PageSize);
+            request.ServiceTypeId, request.CategoryId, request.From?.UtcDateTime, request.To?.UtcDateTime, request.OnlyAvailable, request.Page, request.PageSize);
         return Ok(await Dispatcher.Query(query, cancellationToken));
     }
 

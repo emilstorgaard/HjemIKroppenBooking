@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HjemIKroppenBooking.Api.Controllers;
 
-/// <summary>Series of group sessions, readable without signing in. Booking a series is under <c>/me/series/{id}/bookings</c>.</summary>
+/// <summary>Series of sessions, readable without signing in. Booking a series is under <c>/me/series/{id}/bookings</c>.</summary>
 [ApiVersion("1.0")]
 [Route(ApiRoutes.Prefix + "/series")]
 [AllowAnonymous]

@@ -14,7 +14,7 @@ public sealed class ListSessionsQueryHandler(ISessionQueries sessions, TimeProvi
         var filter = new SessionListFilter(
             timeProvider.GetUtcNow().UtcDateTime,
             query.ServiceTypeId,
-            query.Category,
+            query.CategoryId,
             query.SeriesId,
             query.IsCancelled,
             query.Upcoming,

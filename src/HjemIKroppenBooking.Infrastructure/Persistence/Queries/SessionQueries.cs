@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using HjemIKroppenBooking.Application.Abstractions.Persistence;
 using HjemIKroppenBooking.Application.Contracts.Responses.Common;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Application.Contracts.Responses.Sessions;
 using HjemIKroppenBooking.Application.Features.Sessions.Common;
 using HjemIKroppenBooking.Domain.Sessions;
@@ -15,7 +16,7 @@ internal sealed class SessionQueries(AppDbContext db) : ISessionQueries
         s.Id,
         s.ServiceTypeId,
         s.ServiceType.Name,
-        s.ServiceType.Category,
+        new ServiceCategorySummary(s.ServiceType.Category.Id, s.ServiceType.Category.Name, s.ServiceType.Category.Slug),
         s.SeriesId,
         s.Series != null ? s.Series.Title : null,
         s.StartsAtUtc,
@@ -29,7 +30,7 @@ internal sealed class SessionQueries(AppDbContext db) : ISessionQueries
         s.Id,
         s.ServiceTypeId,
         s.ServiceType.Name,
-        s.ServiceType.Category,
+        new ServiceCategorySummary(s.ServiceType.Category.Id, s.ServiceType.Category.Name, s.ServiceType.Category.Slug),
         s.SeriesId,
         s.Series != null ? s.Series.Title : null,
         s.StartsAtUtc,
@@ -79,9 +80,9 @@ internal sealed class SessionQueries(AppDbContext db) : ISessionQueries
             sessions = sessions.Where(s => s.ServiceTypeId == serviceTypeId);
         }
 
-        if (filter.Category is { } category)
+        if (filter.CategoryId is { } categoryId)
         {
-            sessions = sessions.Where(s => s.ServiceType.Category == category);
+            sessions = sessions.Where(s => s.ServiceType.CategoryId == categoryId);
         }
 
         if (filter.SeriesId is { } seriesId)

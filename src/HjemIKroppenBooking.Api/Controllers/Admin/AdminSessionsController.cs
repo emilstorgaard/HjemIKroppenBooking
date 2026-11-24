@@ -26,7 +26,7 @@ public sealed class AdminSessionsController(IDispatcher dispatcher) : AdminContr
     public async Task<ActionResult<PagedResponse<AdminSessionResponse>>> List([FromQuery] ListSessionsRequest request, CancellationToken cancellationToken)
     {
         var query = new ListSessionsQuery(
-            request.ServiceTypeId, request.Category, request.SeriesId, request.IsCancelled, request.Upcoming,
+            request.ServiceTypeId, request.CategoryId, request.SeriesId, request.IsCancelled, request.Upcoming,
             request.From?.UtcDateTime, request.To?.UtcDateTime, request.OnlyAvailable, request.Page, request.PageSize);
         return Ok(await Dispatcher.Query(query, cancellationToken));
     }

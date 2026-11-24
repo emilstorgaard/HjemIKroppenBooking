@@ -1,4 +1,4 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 
 namespace HjemIKroppenBooking.Application.Contracts.Responses.Series;
 
@@ -7,7 +7,7 @@ public sealed record AdminSeriesListItemResponse(
     string Title,
     Guid ServiceTypeId,
     string ServiceTypeName,
-    ServiceCategory Category,
+    ServiceCategorySummary Category,
     bool IsCancelled,
     int SessionCount,
     int ParticipantCount,

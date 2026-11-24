@@ -27,12 +27,17 @@ public static class ErrorCodes
     public const string UserInactive = "user.inactive";
     public const string UserCannotChangeOwnAccount = "user.cannot_change_own_account";
 
+    // Service categories
+    public const string ServiceCategoryNotFound = "service_category.not_found";
+    public const string ServiceCategoryNameAlreadyExists = "service_category.name_already_exists";
+    public const string ServiceCategorySlugAlreadyExists = "service_category.slug_already_exists";
+    public const string ServiceCategoryInUse = "service_category.in_use";
+
     // Service types
     public const string ServiceTypeNotFound = "service_type.not_found";
     public const string ServiceTypeNameAlreadyExists = "service_type.name_already_exists";
     public const string ServiceTypeInactive = "service_type.inactive";
     public const string ServiceTypeInUse = "service_type.in_use";
-    public const string ServiceTypeNotGroup = "service_type.not_group_category";
 
     // Sessions
     public const string SessionNotFound = "session.not_found";
@@ -66,11 +71,11 @@ public static class ErrorCodes
     public const string ValidationInvalidValue = "validation.invalid_value";
     public const string ValidationEnumInvalid = "validation.enum_invalid";
     public const string ValidationEmailInvalid = "validation.email_invalid";
+    public const string ValidationSlugInvalid = "validation.slug_invalid";
     public const string ValidationPasswordTooShort = "validation.password_too_short";
     public const string ValidationPasswordTooLong = "validation.password_too_long";
     public const string ValidationPasswordUnchanged = "validation.password_unchanged";
     public const string ValidationCapacityOutOfRange = "validation.capacity_out_of_range";
-    public const string ValidationIndividualCapacityMustBeOne = "validation.individual_capacity_must_be_one";
     public const string ValidationDurationOutOfRange = "validation.duration_out_of_range";
     public const string ValidationEndBeforeStart = "validation.end_before_start";
     public const string ValidationDateRangeInvalid = "validation.date_range_invalid";

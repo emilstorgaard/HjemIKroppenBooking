@@ -6,7 +6,7 @@ using HjemIKroppenBooking.Domain.Sessions;
 namespace HjemIKroppenBooking.Domain.Series;
 
 /// <summary>
-/// Groups several sessions of a group service type into one series that users can book in one go. The
+/// Groups several sessions of a service type into one series that users can book in one go. The
 /// sessions remain separate <see cref="Session"/> aggregates; every series operation goes through their methods,
 /// so capacity and concurrency rules are the same as for single bookings. Series may overlap freely.
 /// </summary>
@@ -35,15 +35,10 @@ public sealed class SessionSeries : Entity
     /// <summary>Navigation for queries. Domain operations receive the sessions explicitly.</summary>
     public IReadOnlyCollection<Session> Sessions => _sessions;
 
-    /// <summary>Creates a series for an active group service type. The title defaults to the service type name.</summary>
+    /// <summary>Creates a series for an active service type. The title defaults to the service type name.</summary>
     public static SessionSeries Create(ServiceType serviceType, string? title)
     {
         ArgumentNullException.ThrowIfNull(serviceType);
-        if (!serviceType.IsGroup)
-        {
-            throw DomainException.Validation(ErrorCodes.ServiceTypeNotGroup, Guard.Field("serviceTypeId"));
-        }
-
         if (!serviceType.IsActive)
         {
             throw DomainException.Conflict(ErrorCodes.ServiceTypeInactive);

@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using HjemIKroppenBooking.Api.ErrorHandling;
 using HjemIKroppenBooking.Application.Contracts.Responses.Auth;
 using HjemIKroppenBooking.Application.Contracts.Responses.Series;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Application.Contracts.Responses.ServiceTypes;
 using HjemIKroppenBooking.Application.Contracts.Responses.Sessions;
 using HjemIKroppenBooking.Application.Contracts.Responses.Users;
@@ -74,9 +75,17 @@ public abstract class IntegrationTestBase(ApiFactory factory) : IClassFixture<Ap
         return (await ReadAsync<LoginResponse>(response, HttpStatusCode.OK)).AccessToken;
     }
 
+    protected static async Task<Guid> CreateCategoryAsync(HttpClient admin)
+    {
+        var request = new { name = $"Kategori {Guid.NewGuid():N}" };
+        using var response = await admin.PostAsJsonAsync("/api/v1/admin/service-categories", request, Json, Ct);
+        return (await ReadAsync<AdminServiceCategoryResponse>(response, HttpStatusCode.Created)).Id;
+    }
+
     protected static async Task<Guid> CreateGroupServiceTypeAsync(HttpClient admin)
     {
-        var request = new { category = "Group", name = $"Group {Guid.NewGuid():N}", description = (string?)null, defaultDurationMinutes = 60, defaultCapacity = 10, sortOrder = 0, isActive = true };
+        var categoryId = await CreateCategoryAsync(admin);
+        var request = new { categoryId, name = $"Group {Guid.NewGuid():N}", description = (string?)null, defaultDurationMinutes = 60, defaultCapacity = 10, sortOrder = 0, isActive = true };
         using var response = await admin.PostAsJsonAsync("/api/v1/admin/service-types", request, Json, Ct);
         return (await ReadAsync<AdminServiceTypeResponse>(response, HttpStatusCode.Created)).Id;
     }

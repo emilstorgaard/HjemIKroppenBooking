@@ -1,4 +1,4 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 
 namespace HjemIKroppenBooking.Application.Contracts.Responses.Series;
 
@@ -12,7 +12,7 @@ public sealed record SeriesResponse(
     string Title,
     Guid ServiceTypeId,
     string ServiceTypeName,
-    ServiceCategory Category,
+    ServiceCategorySummary Category,
     bool IsBookable,
     int AvailableSpots,
     DateTime? FirstStartsAt,

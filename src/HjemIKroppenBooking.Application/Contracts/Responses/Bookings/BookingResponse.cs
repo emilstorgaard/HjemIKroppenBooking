@@ -1,5 +1,5 @@
+using HjemIKroppenBooking.Application.Contracts.Responses.ServiceCategories;
 using HjemIKroppenBooking.Domain.Bookings;
-using HjemIKroppenBooking.Domain.ServiceTypes;
 
 namespace HjemIKroppenBooking.Application.Contracts.Responses.Bookings;
 
@@ -9,7 +9,7 @@ public sealed record BookingResponse(
     Guid SessionId,
     Guid? SeriesId,
     string ServiceTypeName,
-    ServiceCategory Category,
+    ServiceCategorySummary Category,
     DateTime StartsAt,
     DateTime EndsAt,
     string? Location,

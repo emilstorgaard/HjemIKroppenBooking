@@ -25,7 +25,6 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("HjemIKroppenBooking.Domain.Bookings.Booking", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CancelledAtUtc")
@@ -67,7 +66,6 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("HjemIKroppenBooking.Domain.Series.SessionSeries", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CancelledAtUtc")
@@ -97,16 +95,47 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
                     b.ToTable("SessionSeries");
                 });
 
+            modelBuilder.Entity("HjemIKroppenBooking.Domain.ServiceCategories.ServiceCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("UX_ServiceCategories_Name");
+
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasDatabaseName("UX_ServiceCategories_Slug");
+
+                    b.ToTable("ServiceCategories");
+                });
+
             modelBuilder.Entity("HjemIKroppenBooking.Domain.ServiceTypes.ServiceType", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
@@ -137,9 +166,9 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Category", "Name")
+                    b.HasIndex("CategoryId", "Name")
                         .IsUnique()
-                        .HasDatabaseName("UX_ServiceTypes_Category_Name");
+                        .HasDatabaseName("UX_ServiceTypes_CategoryId_Name");
 
                     b.ToTable("ServiceTypes");
                 });
@@ -147,7 +176,6 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("HjemIKroppenBooking.Domain.Sessions.Session", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ActiveBookingCount")
@@ -212,7 +240,6 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("HjemIKroppenBooking.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAtUtc")
@@ -283,6 +310,17 @@ namespace HjemIKroppenBooking.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("ServiceType");
+                });
+
+            modelBuilder.Entity("HjemIKroppenBooking.Domain.ServiceTypes.ServiceType", b =>
+                {
+                    b.HasOne("HjemIKroppenBooking.Domain.ServiceCategories.ServiceCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("HjemIKroppenBooking.Domain.Sessions.Session", b =>

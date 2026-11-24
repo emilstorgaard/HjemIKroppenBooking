@@ -1,5 +1,3 @@
-using HjemIKroppenBooking.Domain.ServiceTypes;
-
 namespace HjemIKroppenBooking.Application.Features.Sessions.Common;
 
 /// <summary>
@@ -10,10 +8,11 @@ namespace HjemIKroppenBooking.Application.Features.Sessions.Common;
 public sealed record SessionListFilter(
     DateTime NowUtc,
     Guid? ServiceTypeId = null,
-    ServiceCategory? Category = null,
+    Guid? CategoryId = null,
     Guid? SeriesId = null,
     bool? IsCancelled = null,
     bool? Upcoming = null,
     DateTime? FromUtc = null,
     DateTime? ToUtc = null,
-    bool OnlyAvailable = false);
+    bool OnlyAvailable = false
+);

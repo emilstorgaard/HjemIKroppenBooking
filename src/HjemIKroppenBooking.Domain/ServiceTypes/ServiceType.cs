@@ -1,4 +1,5 @@
 using HjemIKroppenBooking.Domain.Common;
+using HjemIKroppenBooking.Domain.ServiceCategories;
 using HjemIKroppenBooking.Domain.Sessions;
 
 namespace HjemIKroppenBooking.Domain.ServiceTypes;
@@ -12,14 +13,14 @@ public sealed class ServiceType : Entity
     public const int NameMaxLength = 150;
     public const int DescriptionMaxLength = 2000;
 
-    /// <summary>Individual (non-group) service types always have exactly one spot.</summary>
-    public const int IndividualCapacity = 1;
-
     private ServiceType()
     {
     }
 
-    public ServiceCategory Category { get; private set; }
+    public Guid CategoryId { get; private set; }
+
+    /// <summary>Navigation for queries. Repositories always include it.</summary>
+    public ServiceCategory Category { get; private set; } = null!;
 
     /// <summary>Display name. Unique within a category.</summary>
     public string Name { get; private set; } = string.Empty;
@@ -37,8 +38,6 @@ public sealed class ServiceType : Entity
     /// <summary>Display order. Lowest first.</summary>
     public int SortOrder { get; private set; }
 
-    public bool IsGroup => Category == ServiceCategory.Group;
-
     public static ServiceType Create(
         ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, int sortOrder, bool isActive)
     {
@@ -50,21 +49,13 @@ public sealed class ServiceType : Entity
     public void Update(
         ServiceCategory category, string name, string? description, int defaultDurationMinutes, int defaultCapacity, int sortOrder, bool isActive)
     {
-        if (!Enum.IsDefined(category))
-        {
-            throw DomainException.Validation(ErrorCodes.ValidationEnumInvalid, Guard.Field("category"));
-        }
-
+        ArgumentNullException.ThrowIfNull(category);
         var validName = Guard.RequiredText(name, NameMaxLength, "name");
         var validDescription = Guard.OptionalText(description, DescriptionMaxLength, "description");
         Guard.InRange(defaultDurationMinutes, Session.MinDurationMinutes, Session.MaxDurationMinutes, ErrorCodes.ValidationDurationOutOfRange, "defaultDurationMinutes");
         Guard.InRange(defaultCapacity, Session.MinCapacity, Session.MaxCapacity, ErrorCodes.ValidationCapacityOutOfRange, "defaultCapacity");
 
-        if (category != ServiceCategory.Group && defaultCapacity != IndividualCapacity)
-        {
-            throw DomainException.Validation(ErrorCodes.ValidationIndividualCapacityMustBeOne, Guard.Field("defaultCapacity"));
-        }
-
+        CategoryId = category.Id;
         Category = category;
         Name = validName;
         Description = validDescription;

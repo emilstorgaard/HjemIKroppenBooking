@@ -21,7 +21,7 @@ public sealed class ServiceTypesController(IDispatcher dispatcher) : ApiControll
     [ProducesResponseType<PagedResponse<ServiceTypeResponse>>(StatusCodes.Status200OK)]
     [ProducesValidationProblem(StatusCodes.Status422UnprocessableEntity)]
     public async Task<ActionResult<PagedResponse<ServiceTypeResponse>>> List([FromQuery] ListPublicServiceTypesRequest request, CancellationToken cancellationToken) =>
-        Ok(await Dispatcher.Query(new ListPublicServiceTypesQuery(request.Category, request.Page, request.PageSize), cancellationToken));
+        Ok(await Dispatcher.Query(new ListPublicServiceTypesQuery(request.CategoryId, request.Page, request.PageSize), cancellationToken));
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType<ServiceTypeResponse>(StatusCodes.Status200OK)]

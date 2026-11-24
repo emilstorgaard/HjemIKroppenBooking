@@ -39,11 +39,13 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
         services.AddScoped<IServiceTypeRepository, ServiceTypeRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
         services.AddScoped<ISessionSeriesRepository, SessionSeriesRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IUserQueries, UserQueries>();
+        services.AddScoped<IServiceCategoryQueries, ServiceCategoryQueries>();
         services.AddScoped<IServiceTypeQueries, ServiceTypeQueries>();
         services.AddScoped<ISessionQueries, SessionQueries>();
         services.AddScoped<ISeriesQueries, SeriesQueries>();

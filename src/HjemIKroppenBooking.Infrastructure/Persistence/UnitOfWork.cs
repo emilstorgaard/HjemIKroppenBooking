@@ -50,6 +50,16 @@ internal sealed class UnitOfWork(AppDbContext db) : IUnitOfWork
             return ErrorCodes.ServiceTypeNameAlreadyExists;
         }
 
+        if (message.Contains(IndexNames.ServiceCategoryName, StringComparison.Ordinal))
+        {
+            return ErrorCodes.ServiceCategoryNameAlreadyExists;
+        }
+
+        if (message.Contains(IndexNames.ServiceCategorySlug, StringComparison.Ordinal))
+        {
+            return ErrorCodes.ServiceCategorySlugAlreadyExists;
+        }
+
         return ErrorCodes.ServerUnexpectedError;
     }
 }

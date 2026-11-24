@@ -8,15 +8,16 @@ using HjemIKroppenBooking.Domain.ServiceTypes;
 
 namespace HjemIKroppenBooking.Application.Features.ServiceTypes.CreateServiceType;
 
-public sealed class CreateServiceTypeCommandHandler(IServiceTypeRepository serviceTypes, IUnitOfWork unitOfWork)
+public sealed class CreateServiceTypeCommandHandler(IServiceTypeRepository serviceTypes, IServiceCategoryRepository categories, IUnitOfWork unitOfWork)
     : ICommandHandler<CreateServiceTypeCommand, AdminServiceTypeResponse>
 {
     public async Task<AdminServiceTypeResponse> Handle(CreateServiceTypeCommand command, CancellationToken cancellationToken)
     {
+        var category = await categories.GetByIdAsync(command.CategoryId, cancellationToken) ?? throw DomainException.NotFound(ErrorCodes.ServiceCategoryNotFound);
         var serviceType = ServiceType.Create(
-            command.Category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.SortOrder, command.IsActive);
+            category, command.Name, command.Description, command.DefaultDurationMinutes, command.DefaultCapacity, command.SortOrder, command.IsActive);
 
-        if (await serviceTypes.NameExistsAsync(serviceType.Category, serviceType.Name, null, cancellationToken))
+        if (await serviceTypes.NameExistsAsync(serviceType.CategoryId, serviceType.Name, null, cancellationToken))
         {
             throw DomainException.Conflict(ErrorCodes.ServiceTypeNameAlreadyExists);
         }

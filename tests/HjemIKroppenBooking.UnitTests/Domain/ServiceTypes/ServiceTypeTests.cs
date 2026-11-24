@@ -8,33 +8,34 @@ namespace HjemIKroppenBooking.UnitTests.Domain.ServiceTypes;
 public sealed class ServiceTypeTests
 {
     [Fact]
-    public void Create_ValidGroup_StoresTrimmedValues()
+    public void Create_Valid_StoresTrimmedValues()
     {
         // Arrange
         const string name = "  Saturday group  ";
 
         // Act
-        var serviceType = ServiceType.Create(ServiceCategory.Group, name, "  ", 90, 12, 3, isActive: true);
+        var serviceType = ServiceType.Create(Category(), name, "  ", 90, 12, 3, isActive: true);
 
         // Assert
         Assert.Equal("Saturday group", serviceType.Name);
         Assert.Null(serviceType.Description);
         Assert.Equal(12, serviceType.DefaultCapacity);
-        Assert.True(serviceType.IsGroup);
         Assert.True(serviceType.IsActive);
     }
 
-    [Fact]
-    public void Create_IndividualWithCapacityAboveOne_ThrowsIndividualCapacityMustBeOne()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(8)]
+    public void Create_AnyCategory_AllowsOneOrMoreSpots(int capacity)
     {
         // Arrange
-        const int capacity = 2;
+        var category = Category();
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(ServiceCategory.Conversation, "Talk therapy", null, 60, capacity, 0, isActive: true));
+        var serviceType = ServiceType.Create(category, "Talk therapy", null, 60, capacity, 0, isActive: true);
 
         // Assert
-        AssertDomainError(exception, ErrorCodes.ValidationIndividualCapacityMustBeOne, ErrorType.Validation);
+        Assert.Equal(capacity, serviceType.DefaultCapacity);
     }
 
     [Theory]
@@ -46,7 +47,7 @@ public sealed class ServiceTypeTests
         const string name = "Dance therapy";
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(ServiceCategory.Dance, name, null, durationMinutes, 1, 0, isActive: true));
+        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, durationMinutes, 1, 0, isActive: true));
 
         // Assert
         AssertDomainError(exception, ErrorCodes.ValidationDurationOutOfRange, ErrorType.Validation);
@@ -59,7 +60,7 @@ public sealed class ServiceTypeTests
         var name = new string('x', ServiceType.NameMaxLength + 1);
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(ServiceCategory.Dance, name, null, 60, 1, 0, isActive: true));
+        var exception = Record.Exception(() => ServiceType.Create(Category(), name, null, 60, 1, 0, isActive: true));
 
         // Assert
         var error = AssertDomainError(exception, ErrorCodes.ValidationMaxLength, ErrorType.Validation);
@@ -67,16 +68,16 @@ public sealed class ServiceTypeTests
     }
 
     [Fact]
-    public void Create_UndefinedCategory_ThrowsEnumInvalid()
+    public void Create_WithCategory_StoresCategory()
     {
         // Arrange
-        const ServiceCategory category = (ServiceCategory)99;
+        var category = Category();
 
         // Act
-        var exception = Record.Exception(() => ServiceType.Create(category, "Unknown", null, 60, 1, 0, isActive: true));
+        var serviceType = ServiceType.Create(category, "Dance therapy", null, 60, 1, 0, isActive: true);
 
         // Assert
-        AssertDomainError(exception, ErrorCodes.ValidationEnumInvalid, ErrorType.Validation);
+        Assert.Equal(category.Id, serviceType.CategoryId);
     }
 
     [Fact]
