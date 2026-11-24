@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HjemIKroppenBooking.Api.Controllers;
 
-/// <summary>Categories with at least one active service type, readable without signing in.</summary>
+/// <summary>All categories, readable without signing in. Used by the booking page and the category picker in Umbraco.</summary>
 [ApiVersion("1.0")]
 [Route(ApiRoutes.Prefix + "/service-categories")]
 [AllowAnonymous]

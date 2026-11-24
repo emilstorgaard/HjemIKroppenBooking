@@ -187,6 +187,7 @@ docker compose logs -f api
 |---|---|
 | `DB_CONNECTION_STRING` | `ConnectionStrings__Default` |
 | `ALLOWED_ORIGIN` | `AllowedOrigins__0` |
+| `UMBRACO_ORIGIN` | `AllowedOrigins__1` |
 | `JWT_KEY` | `Jwt__Key` |
 | `TRUSTED_PROXY_NETWORK` | `ForwardedHeaders__KnownNetworks__0` |
 

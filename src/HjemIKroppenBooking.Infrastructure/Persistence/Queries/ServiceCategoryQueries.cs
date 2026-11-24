@@ -13,7 +13,6 @@ internal sealed class ServiceCategoryQueries(AppDbContext db) : IServiceCategory
 {
     public Task<PagedResponse<ServiceCategoryResponse>> ListPublicAsync(ListPublicServiceCategoriesQuery query, CancellationToken cancellationToken) =>
         db.ServiceCategories.AsNoTracking()
-            .Where(c => db.ServiceTypes.Any(s => s.CategoryId == c.Id && s.IsActive))
             .ToPagedResponseAsync(Order, c => new ServiceCategoryResponse(c.Id, c.Name, c.Slug), query.Page, query.PageSize, cancellationToken);
 
     public Task<PagedResponse<AdminServiceCategoryResponse>> ListAsync(ListServiceCategoriesQuery query, CancellationToken cancellationToken) =>

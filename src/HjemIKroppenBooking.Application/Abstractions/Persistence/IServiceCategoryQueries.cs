@@ -5,7 +5,7 @@ using HjemIKroppenBooking.Application.Features.ServiceCategories.ListServiceCate
 
 namespace HjemIKroppenBooking.Application.Abstractions.Persistence;
 
-/// <summary>Read side for service categories. The public list only returns categories with at least one active service type.</summary>
+/// <summary>Read side for service categories.</summary>
 public interface IServiceCategoryQueries
 {
     Task<PagedResponse<ServiceCategoryResponse>> ListPublicAsync(ListPublicServiceCategoriesQuery query, CancellationToken cancellationToken);
